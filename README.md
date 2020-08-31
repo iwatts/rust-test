@@ -1,4 +1,4 @@
-# rust-test
+# LiveView Technologies WebDev Test
 Thank you for your interest in working with us in the LiveView Technologies Web Development team!
 
 In this repo, you'll find the scaffolding for a very basic web app written in [Rust](https://www.rust-lang.org/) using the [Seed](https://seed-rs.org/) library.
