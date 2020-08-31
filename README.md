@@ -27,6 +27,8 @@ To complete this test, your app needs to have a the following features:
 If you get stuck, be sure to check the Seed [tutorials](https://seed-rs.org/) and/or [API documentation](https://docs.rs/seed/0.7.0/seed/) for any Seed-related issues, or [The Rust Book](https://doc.rust-lang.org/book/).
 
 The finished product should look something like this (but hopefully prettier):
+![LVT](https://cameras.liveviewtech.com/img/LVLogo_small.png)
+
 ![Rust test 2](https://lvt-dev.s3-us-west-2.amazonaws.com/rust-test/rust-test-2.gif)
 
 ## Send us your code
