@@ -1,49 +1,98 @@
-use seed::prelude::*;
-use seed::*;
+use seed::{prelude::*, *};
+use std::collections::BTreeMap;
+use ulid::Ulid;
 
 #[derive(Default)]
 struct Model {
-    text_to_show: String,
+    list_items: BTreeMap<Ulid, ListItem>,
+    new_item_text: String
 }
 
-#[derive(Clone)]
+struct ListItem {
+    id: Ulid,
+    title: String
+}
+
 enum Msg {
-    ChangeText(String),
+    CreateListItem(String),
+    RemoveListItem(Ulid),
+    ClearList,
 }
 
 fn update(msg: Msg, model: &mut Model, _orders: &mut impl Orders<Msg>) {
-    use Msg::*;
+    // use Msg::*;
 
     match msg {
-        ChangeText(new_text) => model.text_to_show = new_text,
+        Msg::CreateListItem(title) => {
+            let title = model.new_item_text.trim();
+            if not(title.is_empty()) {
+                let id = Ulid::new();
+                model.list_items.insert(id, ListItem {
+                    id,
+                    title: title.to_owned(),
+                });
+                model.new_item_text.clear();
+            }
+        }
+        Msg::RemoveListItem(id) => {
+            model.list_items.remove(&id);
+        }
+        Msg::ClearList => {}
     }
 }
 
-fn view(model: &Model) -> Node<Msg> {
-    div![
+fn view_header() -> Node<Msg> {
+    header![
+        C!["header"],
+        img![
+            attrs!{At::Src => "https://cameras.liveviewtech.com/img/LVLogo_small.png"}
+        ]
+    ]
+}
+
+fn view_list(list_items: &BTreeMap<Ulid, ListItem>) -> Node<Msg> {
+    ul![
+        C!["list"],
+        list_items.values().map(|item| {
+            li![
+                div![
+                    C!["view"],
+                    label![&item.title],
+                    button![C!["destroy"], "X"],
+                ]
+            ]
+        })
+    ]
+}
+
+fn view_controls() -> Vec<Node<Msg>> {
+    vec![
         input![
-            attrs! {
-                At::Placeholder => "Enter some text..."
-            },
-            // input_ev(Ev::Input, Msg::ChangeText),
+            C!["new"],
+            attrs!{At::Placeholder => "Enter some text..."}
         ],
         div![
-            input![
-                attrs! {
-                    At::Value => "Save",
-                    At::Type => "button",
-                },
-                input_ev(Ev::Click, Msg::ChangeText),
+            C!["controls"],
+            button![
+                C!["save"],
+                "Save",
+                input_ev(Ev::Click, Msg::CreateListItem)
             ],
-            input![
-                attrs! {
-                    At::Value => "Clear",
-                    At::Type => "button",
-                },
-                input_ev(Ev::Click, Msg::ChangeText),
-            ],
-        ],
-        div![&model.text_to_show]
+            button![C!["clear"], "Clear"],
+        ]
+    ]
+}
+
+fn view(model: &Model) -> Vec<Node<Msg>> {
+    nodes![
+        view_header(),
+        section![
+            C!["main"],
+            view_controls(),
+            IF!(not(model.list_items.is_empty()) => vec![
+                view_list(&model.list_items),
+            ]),
+        ]
     ]
 }
 
