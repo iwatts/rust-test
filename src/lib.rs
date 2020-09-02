@@ -24,7 +24,7 @@ fn update(msg: Msg, model: &mut Model, _orders: &mut impl Orders<Msg>) {
 
     match msg {
         Msg::CreateListItem(title) => {
-            // let title = model.new_item_text.trim();
+            let title = model.new_item_text.trim();
             if not(title.is_empty()) {
                 let id = Ulid::new();
                 model.list_items.insert(id, ListItem {
@@ -76,7 +76,8 @@ fn view_controls(new_title: &str) -> Vec<Node<Msg>> {
     vec![
         input![
             C!["new"],
-            attrs!{At::Placeholder => "Enter some text...", At::Value => new_title},
+            attrs!{At::Placeholder => "Enter some text..."},
+            input_ev(Ev::Input, Msg::CreateListItem)
         ],
         div![
             C!["controls"],
