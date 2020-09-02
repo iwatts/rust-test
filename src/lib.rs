@@ -25,7 +25,15 @@ fn view(model: &Model) -> Node<Msg> {
             attrs! {
                 At::Placeholder => "Enter some text..."
             },
-            input_ev(Ev::Input, Msg::ChangeText),
+            // input_ev(Ev::Input, Msg::ChangeText),
+        ],
+        div![
+            button![
+                "Save",    
+            ],
+            button![
+                "Clear",    
+            ]
         ],
         div![&model.text_to_show]
     ]
