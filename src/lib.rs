@@ -28,12 +28,20 @@ fn view(model: &Model) -> Node<Msg> {
             // input_ev(Ev::Input, Msg::ChangeText),
         ],
         div![
-            button![
-                "Save",    
+            input![
+                attrs! {
+                    At::Value => "Save",
+                    At::Type => "button",
+                },
+                input_ev(Ev::Click, Msg::ChangeText),
             ],
-            button![
-                "Clear",    
-            ]
+            input![
+                attrs! {
+                    At::Value => "Clear",
+                    At::Type => "button",
+                },
+                input_ev(Ev::Click, Msg::ChangeText),
+            ],
         ],
         div![&model.text_to_show]
     ]
