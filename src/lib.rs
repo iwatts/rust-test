@@ -24,7 +24,7 @@ fn update(msg: Msg, model: &mut Model, _orders: &mut impl Orders<Msg>) {
 
     match msg {
         Msg::CreateListItem(title) => {
-            let title = model.new_item_text.trim();
+            // let title = model.new_item_text.trim();
             if not(title.is_empty()) {
                 let id = Ulid::new();
                 model.list_items.insert(id, ListItem {
@@ -37,7 +37,9 @@ fn update(msg: Msg, model: &mut Model, _orders: &mut impl Orders<Msg>) {
         Msg::RemoveListItem(id) => {
             model.list_items.remove(&id);
         }
-        Msg::ClearList => {}
+        Msg::ClearList => {
+            model.list_items.clear();
+        }
     }
 }
 
@@ -54,31 +56,40 @@ fn view_list(list_items: &BTreeMap<Ulid, ListItem>) -> Node<Msg> {
     ul![
         C!["list"],
         list_items.values().map(|item| {
+            let id = item.id;
             li![
                 div![
                     C!["view"],
                     label![&item.title],
-                    button![C!["destroy"], "X"],
+                    button![
+                        C!["destroy"],
+                        "X",
+                        ev(Ev::Click, move |_| Msg::RemoveListItem(id))    
+                    ],
                 ]
             ]
         })
     ]
 }
 
-fn view_controls() -> Vec<Node<Msg>> {
+fn view_controls(new_title: &str) -> Vec<Node<Msg>> {
     vec![
         input![
             C!["new"],
-            attrs!{At::Placeholder => "Enter some text..."}
+            attrs!{At::Placeholder => "Enter some text...", At::Value => new_title},
         ],
         div![
             C!["controls"],
             button![
                 C!["save"],
                 "Save",
-                input_ev(Ev::Click, Msg::CreateListItem)
+                input_ev(Ev::Click, |new_title| Msg::CreateListItem(new_title))
             ],
-            button![C!["clear"], "Clear"],
+            button![
+                C!["clear"],
+                "Clear",
+                ev(Ev::Click, |_| Msg::ClearList),
+            ],
         ]
     ]
 }
@@ -88,7 +99,7 @@ fn view(model: &Model) -> Vec<Node<Msg>> {
         view_header(),
         section![
             C!["main"],
-            view_controls(),
+            view_controls(&model.new_item_text),
             IF!(not(model.list_items.is_empty()) => vec![
                 view_list(&model.list_items),
             ]),
