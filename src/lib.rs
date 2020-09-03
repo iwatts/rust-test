@@ -5,7 +5,7 @@ use ulid::Ulid;
 #[derive(Default)]
 struct Model {
     list_items: BTreeMap<Ulid, ListItem>,
-    new_item_text: String
+    new_item_text: String,
 }
 
 struct ListItem {
@@ -17,10 +17,11 @@ enum Msg {
     CreateListItem(String),
     RemoveListItem(Ulid),
     ClearList,
+    WriteTitle(String),
 }
 
 fn update(msg: Msg, model: &mut Model, _orders: &mut impl Orders<Msg>) {
-    // use Msg::*;
+    //use Msg::*;
 
     match msg {
         Msg::CreateListItem(title) => {
@@ -31,7 +32,6 @@ fn update(msg: Msg, model: &mut Model, _orders: &mut impl Orders<Msg>) {
                     id,
                     title: title.to_owned(),
                 });
-                model.new_item_text.clear();
             }
         }
         Msg::RemoveListItem(id) => {
@@ -39,6 +39,9 @@ fn update(msg: Msg, model: &mut Model, _orders: &mut impl Orders<Msg>) {
         }
         Msg::ClearList => {
             model.list_items.clear();
+        }
+        Msg::WriteTitle(new_text) => { 
+            model.new_item_text = new_text
         }
     }
 }
@@ -77,14 +80,14 @@ fn view_controls(new_title: &str) -> Vec<Node<Msg>> {
         input![
             C!["new"],
             attrs!{At::Placeholder => "Enter some text..."},
-            input_ev(Ev::Input, Msg::CreateListItem)
+            input_ev(Ev::Input, Msg::WriteTitle),
         ],
         div![
             C!["controls"],
             button![
                 C!["save"],
                 "Save",
-                input_ev(Ev::Click, |new_title| Msg::CreateListItem(new_title))
+                input_ev(Ev::Click, Msg::CreateListItem),
             ],
             button![
                 C!["clear"],

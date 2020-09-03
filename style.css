@@ -5,3 +5,60 @@ body {
 input {
     margin-bottom: 10px;
 }
+
+section#app{ 
+    display: inline-block;
+    border:2px solid #d7dcb6;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+/* LIST DISPLAY STYLES */
+
+.list li {
+    padding: 5px 0px;
+}
+
+
+/* BUTTON STYLES */
+
+button.save {
+    background-color: #A1CF5D; /* Green */
+    border: none;
+    color: white;
+    padding: 5px 15px;
+    margin: 0px 10px; 
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 5px;
+}
+button.save:hover{
+    background-color: #94C778;
+}
+
+button.clear {
+    padding: 5px 15px;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+button.destroy {
+    padding: 5px;
+    font-size: 7px;
+    border-radius: 50%;
+}
+
+button.clear, button.destroy {
+    background-color: #A91616; /* Red */
+    border: none;
+    color: white;
+    margin: 0px 10px; 
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
+button.clear:hover, button.destroy:hover{
+    background-color: #D3442E; 
+}
